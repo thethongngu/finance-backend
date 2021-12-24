@@ -31,13 +31,13 @@ func StartRESTAPIServer() {
 		AllowCredentials: true,
 	}))
 
-	e.Static("/static", "static")
+	e.Static("/", "public")
+	e.File("/", "public/index.html")
 
 	e.GET("/ping", func(c echo.Context) error {
 		fmt.Println("ok")
 		return c.String(http.StatusOK, "pong")
 	})
-	e.File("/", "public/index.html")
 
 	e.POST("/login", usecase.HandleLogin)
 	e.POST("/remember", usecase.HandleRemember)
