@@ -2,6 +2,7 @@ package adaptor
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 )
 
@@ -11,6 +12,7 @@ func GetMySQLConnection() *sql.DB {
 	var err error
 	mysql, err := sql.Open("mysql", "root:localroot@/finance") // TODO: get from env var
 	if err != nil {
+		fmt.Print("Error database...")
 		panic(err)
 	}
 
