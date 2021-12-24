@@ -32,7 +32,7 @@ func StartRESTAPIServer() {
 	}))
 
 	e.Static("/", "public")
-	e.File("/", "public/index.html")
+	// e.File("/", "public/index.html")
 
 	e.GET("/ping", func(c echo.Context) error {
 		fmt.Println("ok")
