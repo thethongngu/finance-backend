@@ -37,6 +37,7 @@ func StartRESTAPIServer() {
 		fmt.Println("ok")
 		return c.String(http.StatusOK, "pong")
 	})
+	e.File("/", "public/index.html")
 
 	e.POST("/login", usecase.HandleLogin)
 	e.POST("/remember", usecase.HandleRemember)
