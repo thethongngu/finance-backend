@@ -55,5 +55,5 @@ func StartRESTAPIServer() {
 
 	member.GET("/stats", usecase.GetStats)
 
-	e.Logger.Fatal(e.Start(":2808"))
+	e.Logger.Fatal(e.Start(":80"))
 }
