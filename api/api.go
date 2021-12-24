@@ -2,6 +2,7 @@ package api
 
 import (
 	"finance/usecase"
+	"net/http"
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
@@ -30,6 +31,8 @@ func StartRESTAPIServer() {
 	}))
 
 	e.Static("/static", "static")
+
+	e.GET("/ping", func(c echo.Context) error { return c.String(http.StatusOK, "pong") })
 
 	e.POST("/login", usecase.HandleLogin)
 	e.POST("/remember", usecase.HandleRemember)
