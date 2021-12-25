@@ -32,8 +32,6 @@ func StartRESTAPIServer() {
 	}))
 
 	e.Static("/", "public")
-	// e.File("/", "public/index.html")
-	// e.File("/static/", "public/index.html")
 
 	e.GET("/ping", func(c echo.Context) error {
 		fmt.Println("ok")
@@ -46,6 +44,7 @@ func StartRESTAPIServer() {
 	e.GET("/currency", usecase.GetCurrency)
 
 	member := e.Group("/member", usecase.ValidateUser)
+	member.Static("/img", "img")
 
 	member.GET("/wallet", usecase.ListWallet)
 
