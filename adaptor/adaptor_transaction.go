@@ -35,7 +35,7 @@ func NewTransactionMySQLAdaptor() TransactionMySQLAdaptor {
 
 func (a TransactionMySQLAdaptor) GetTransactionByID(transactionID int) (*Transaction, error) {
 	var transaction Transaction
-	err := a.conn.QueryRow(`SELECT * FROM transaction WHERE transaction_id = ?`, transactionID).Scan(
+	err := a.conn.QueryRow(`SELECT * FROM Transaction WHERE transaction_id = ?`, transactionID).Scan(
 		&transaction.TransactionID, transaction.WalletID, transaction.Amount, transaction.CreatedAt, transaction.Note)
 	if err != nil {
 		err = fmt.Errorf("[Error] sql: %v", err)
@@ -49,7 +49,7 @@ func (a TransactionMySQLAdaptor) CreateTransaction(walletID int, categoryID int,
 	amount int, note string) error {
 
 	_, err := a.conn.Exec(`
-		INSERT INTO transaction (wallet_id, category_id, amount, note) VALUES (?, ?, ?, ?)`,
+		INSERT INTO Transaction (wallet_id, category_id, amount, note) VALUES (?, ?, ?, ?)`,
 		walletID, categoryID, amount, note,
 	)
 	if err != nil {
@@ -64,7 +64,7 @@ func (a TransactionMySQLAdaptor) UpdateTransaction(transactionID int, walletID i
 	categoryID int, amount int, note string) error {
 
 	_, err := a.conn.Exec(`
-		UPDATE transaction SET wallet_id = ?, category_id = ?, amount = ?, note = ?) 
+		UPDATE Transaction SET wallet_id = ?, category_id = ?, amount = ?, note = ?) 
 		WHERE transaction_id = ?`,
 		transactionID, walletID, categoryID, amount, note,
 	)
@@ -83,7 +83,7 @@ func (a TransactionMySQLAdaptor) DeleteTransaction(transactionID int) error {
 func (a TransactionMySQLAdaptor) GetTotalAmount(walletID int, from time.Time, to time.Time) (int, error) {
 	var total int
 	err := a.conn.QueryRow(`
-		SELECT coalesce(sum(amount), 0) FROM transaction WHERE wallet_id = ? AND created_at BETWEEN ? AND ?`,
+		SELECT coalesce(sum(amount), 0) FROM Transaction WHERE wallet_id = ? AND created_at BETWEEN ? AND ?`,
 		walletID, from.Format("2006-01-02"), to.Format("2006-01-02"),
 	).Scan(&total)
 	if err != nil {

@@ -35,7 +35,7 @@ func NewUserMySQLAdaptor() UserMySQLAdaptor {
 func (mysql UserMySQLAdaptor) GetUserByID(userID int) (*User, error) {
 	var user User
 	err := mysql.conn.
-		QueryRow(`SELECT user_id, username, password, avatar_url FROM user WHERE user_id = ?`, userID).
+		QueryRow(`SELECT user_id, username, password, avatar_url FROM User WHERE user_id = ?`, userID).
 		Scan(&user.UserID, &user.Username, &user.HashedPassword, &user.AvatarURL)
 	if err != nil {
 		err = fmt.Errorf("[Error] GetUserByID: %v", err)
@@ -47,7 +47,7 @@ func (mysql UserMySQLAdaptor) GetUserByID(userID int) (*User, error) {
 func (mysql UserMySQLAdaptor) GetUserByCredentails(username string, hashPassword string) (*User, error) {
 	var user User
 	err := mysql.conn.
-		QueryRow(`SELECT user_id, username, avatar_url FROM user WHERE username = ? AND password = ?`, username, hashPassword).
+		QueryRow(`SELECT user_id, username, avatar_url FROM User WHERE username = ? AND password = ?`, username, hashPassword).
 		Scan(&user.UserID, &user.Username, &user.AvatarURL)
 	if err != nil {
 		fmt.Printf("[Error] GetUserByCredentails: %v\n", err)
@@ -59,7 +59,7 @@ func (mysql UserMySQLAdaptor) GetUserByCredentails(username string, hashPassword
 func (mysql UserMySQLAdaptor) GetUserBySessionID(sessionID string) (*User, error) {
 	var userID int
 	err := mysql.conn.
-		QueryRow(`SELECT user_id FROM session WHERE session_id = ?`, sessionID).Scan(&userID)
+		QueryRow(`SELECT user_id FROM Session WHERE session_id = ?`, sessionID).Scan(&userID)
 	if err != nil {
 		err = fmt.Errorf("[Error] GetUserBySessionID: %v", err)
 		return nil, err
@@ -69,14 +69,14 @@ func (mysql UserMySQLAdaptor) GetUserBySessionID(sessionID string) (*User, error
 }
 
 func (mysql UserMySQLAdaptor) CreateNewUserSession(user *User) (*Session, error) {
-	_, err := mysql.conn.Exec(`INSERT INTO session (user_id) VALUES (?)`, user.UserID)
+	_, err := mysql.conn.Exec(`INSERT INTO Session (user_id) VALUES (?)`, user.UserID)
 	if err != nil {
 		err = fmt.Errorf("[Error] CreateNewUserSession: %v", err)
 		return nil, err
 	}
 
 	var session Session
-	err = mysql.conn.QueryRow(`SELECT session_id, user_id FROM session WHERE user_id = (?)`, user.UserID).
+	err = mysql.conn.QueryRow(`SELECT session_id, user_id FROM Session WHERE user_id = (?)`, user.UserID).
 		Scan(&session.SessionID, &session.UserID)
 	if err != nil {
 		err = fmt.Errorf("[Error] CreateNewUserSession: %v", err)

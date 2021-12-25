@@ -65,7 +65,7 @@ func (a WalletMySQLAdaptor) GetWalletByID(walletID int) (*Wallet, error) {
 }
 
 func (a WalletMySQLAdaptor) GetWalletByUserID(userID int) ([]Wallet, error) {
-	rows, err := a.conn.Query(`SELECT * FROM wallet WHERE user_id = ?`, userID)
+	rows, err := a.conn.Query(`SELECT * FROM Wallet WHERE user_id = ?`, userID)
 	if err != nil {
 		err = fmt.Errorf("[Error] GetWalletByUserID: %v", err)
 		return nil, err
@@ -86,7 +86,7 @@ func (a WalletMySQLAdaptor) GetWalletByUserID(userID int) ([]Wallet, error) {
 }
 
 func (a WalletMySQLAdaptor) GetAllCurrency() ([]Currency, error) {
-	rows, err := a.conn.Query(`SELECT * FROM currency`)
+	rows, err := a.conn.Query(`SELECT * FROM Currency`)
 	if err != nil {
 		err = fmt.Errorf("[Error] GetAllCurrency: %v", err)
 		return nil, err

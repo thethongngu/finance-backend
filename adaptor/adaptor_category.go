@@ -25,7 +25,7 @@ func NewCategoryMySQLAdaptor() CategoryMySQLAdaptor {
 }
 
 func (c CategoryMySQLAdaptor) GetAllCategory() ([]Category, error) {
-	rows, err := c.conn.Query(`SELECT * FROM category`)
+	rows, err := c.conn.Query(`SELECT * FROM Category`)
 	if err != nil {
 		err = fmt.Errorf("[Error] GetAllCategory: %v", err)
 		return nil, err
