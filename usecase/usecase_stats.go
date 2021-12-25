@@ -33,6 +33,7 @@ func GetStats(c echo.Context) error {
 	user := c.Get("User").(*adaptor.User)
 	owner, err := IsUserOwnWalletID(user.UserID, walletID)
 	if err != nil {
+		fmt.Printf("%v\n", err)
 		return c.String(http.StatusBadRequest, `{"message": "Error Server"}`)
 	}
 	if !owner {
