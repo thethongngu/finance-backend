@@ -35,7 +35,7 @@ func NewWalletMySQLAdaptor() WalletMySQLAdaptor {
 func (a WalletMySQLAdaptor) GetWalletByTransactionID(transactionID int) (*Wallet, error) {
 	var walletID int
 	err := a.conn.
-		QueryRow(`SELECT wallet_id FROM transaction WHERE transaction_id = ?`, transactionID).
+		QueryRow(`SELECT wallet_id FROM Transaction WHERE transaction_id = ?`, transactionID).
 		Scan(walletID)
 	if err != nil {
 		err = fmt.Errorf("[Error] sql: %v", err)
@@ -54,7 +54,7 @@ func (a WalletMySQLAdaptor) GetWalletByTransactionID(transactionID int) (*Wallet
 func (a WalletMySQLAdaptor) GetWalletByID(walletID int) (*Wallet, error) {
 	var wallet Wallet
 	err := a.conn.
-		QueryRow(`SELECT wallet_id, currency_id, user_id FROM wallet WHERE wallet_id = ?`, walletID).
+		QueryRow(`SELECT wallet_id, currency_id, user_id FROM Wallet WHERE wallet_id = ?`, walletID).
 		Scan(&wallet.WalletID, &wallet.CurrencyID, &wallet.UserID)
 	if err != nil {
 		err = fmt.Errorf("[Error] sql: %v", err)
