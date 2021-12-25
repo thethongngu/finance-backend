@@ -31,9 +31,9 @@ func StartRESTAPIServer() {
 		AllowCredentials: true,
 	}))
 
-	// e.Static("/", "public")
-	e.File("/", "public/index.html")
-	e.File("/static/", "public/index.html")
+	e.Static("/", "public")
+	// e.File("/", "public/index.html")
+	// e.File("/static/", "public/index.html")
 
 	e.GET("/ping", func(c echo.Context) error {
 		fmt.Println("ok")
