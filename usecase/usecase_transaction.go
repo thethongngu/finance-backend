@@ -5,15 +5,53 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 )
+
+type listTransactionResponse struct {
+	Transactions []adaptor.Transaction `json:"transactions"`
+	Message      string                `json:"message"`
+}
+
+func ListTransaction(c echo.Context) error {
+	walletID, _ := strconv.Atoi(c.QueryParam("wallet_id"))
+
+	user := c.Get("User").(*adaptor.User)
+	owner, err := IsUserOwnWalletID(user.UserID, walletID)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return c.String(http.StatusBadRequest, `{"message": "Error Server"}`)
+	}
+	if !owner {
+		return c.String(http.StatusUnauthorized, `{"message": "Error Permission"}`)
+	}
+
+	txs, err := transactionAdaptor.FilterTransaction(walletID, time.Now(), time.Now())
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return c.JSON(http.StatusInternalServerError, echo.Map{"message": "Try again later"})
+	}
+
+	res := listTransactionResponse{
+		Transactions: txs,
+		Message:      "Success",
+	}
+
+	return c.JSON(http.StatusOK, res)
+}
 
 type addTransactionRequest struct {
 	WalletID   int    `json:"wallet_id" validate:"required"`
 	CategoryID int    `json:"category_id" validate:"required,gt=0"`
 	Amount     int    `json:"amount" validate:"required,gt=0"`
 	Note       string `json:"note"`
+}
+
+type addTransactionResponse struct {
+	Transaction adaptor.Transaction `json:"transaction"`
+	Message     string              `json:"message"`
 }
 
 func AddTransaction(c echo.Context) error {
@@ -40,13 +78,23 @@ func AddTransaction(c echo.Context) error {
 		return c.String(http.StatusUnauthorized, `{"message": "Error Permission"}`)
 	}
 
-	err = transactionAdaptor.CreateTransaction(requestBody.WalletID, requestBody.CategoryID,
+	transactionID, err := transactionAdaptor.CreateTransaction(requestBody.WalletID, requestBody.CategoryID,
 		requestBody.Amount, requestBody.Note)
 	if err != nil {
-		return c.String(http.StatusUnauthorized, `{"message": "Error Server"}`)
+		fmt.Printf("[Error - Transaction Usecase] Add Transaction: %v", err)
+		return c.String(http.StatusInternalServerError, `{"message": "Error Server"}`)
 	}
 
-	return c.String(http.StatusOK, `{"message": "Success"}`)
+	tx, err := transactionAdaptor.GetTransactionByID(int(transactionID))
+	if err != nil {
+		fmt.Printf("[Error - Transaction Usecase] Add Transaction: %v", err)
+		return c.String(http.StatusInternalServerError, `{"message": "Error Server"}`)
+	}
+	res := addTransactionResponse{
+		Transaction: *tx,
+		Message:     "Success",
+	}
+	return c.JSON(http.StatusOK, res)
 }
 
 type updateTransactionRequest struct {

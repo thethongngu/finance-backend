@@ -10,10 +10,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type statsRequest struct {
-	WalletID int `json:"wallet_id"`
-}
-
 type statsResponse struct {
 	AmountToday int     `json:"amount_today"`
 	AmountMonth int     `json:"amount_month"`
@@ -42,7 +38,6 @@ func GetStats(c echo.Context) error {
 
 	amountToday, err := transactionAdaptor.GetTotalAmount(walletID, time.Now(), time.Now())
 	if err != nil {
-		fmt.Print(err)
 		return c.JSON(http.StatusInternalServerError, echo.Map{"message": "Try again later"})
 	}
 

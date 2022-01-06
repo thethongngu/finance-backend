@@ -16,11 +16,12 @@ func GetMySQLConnection() *sql.DB {
 	username := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASS")
 	cfg := mysql.Config{
-		User:   username,
-		Passwd: password,
-		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "finance",
+		User:      username,
+		Passwd:    password,
+		Net:       "tcp",
+		Addr:      "127.0.0.1:3306",
+		DBName:    "finance",
+		ParseTime: true,
 	}
 	mysql, err := sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {

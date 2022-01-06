@@ -26,7 +26,7 @@ func StartRESTAPIServer() {
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://172.18.109.205:3000"},
+		AllowOrigins:     []string{"http://localhost:3000", "finance.namdeo.one"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}))
@@ -48,6 +48,7 @@ func StartRESTAPIServer() {
 
 	member.GET("/wallet", usecase.ListWallet)
 
+	member.GET("/transaction", usecase.ListTransaction)
 	member.POST("/transaction", usecase.AddTransaction)
 	member.PUT("/transaction/:transaction_id", usecase.UpdateTransaction)
 
