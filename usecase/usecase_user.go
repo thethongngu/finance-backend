@@ -51,7 +51,7 @@ func HandleLogin(c echo.Context) error {
 	cookie := new(http.Cookie)
 	cookie.Name = "session_id"
 	cookie.Value = session.SessionID
-	cookie.Expires = time.Now().Add(24 * time.Hour)
+	cookie.Expires = time.Now().Add(24 * time.Hour * 30)
 	cookie.HttpOnly = true
 	cookie.Path = "/"
 	c.SetCookie(cookie)
