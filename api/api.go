@@ -4,6 +4,7 @@ import (
 	"finance/usecase"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
@@ -25,8 +26,13 @@ func StartRESTAPIServer() {
 
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
+
+	ip := os.Getenv("LOCAL_IP")
+	port := os.Getenv("LOCAL_PORT")
+	localAddress := "http://" + ip + ":" + port
+
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://localhost:3000", "finance.namdeo.one"},
+		AllowOrigins:     []string{"http://localhost:3000", localAddress, "finance.namdeo.one"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}))

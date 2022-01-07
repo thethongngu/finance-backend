@@ -106,7 +106,7 @@ func (a TransactionMySQLAdaptor) FilterTransaction(walletID int, from time.Time,
 	}
 	defer rows.Close()
 
-	var transactions []Transaction
+	transactions := make([]Transaction, 0)
 	for rows.Next() {
 		var tx Transaction
 		if err := rows.Scan(&tx.TransactionID, &tx.WalletID, &tx.CategoryID, &tx.Amount,

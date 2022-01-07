@@ -1,3 +1,1 @@
-DB_USER=test
-DB_PASS=test
-go run main.go
+DB_USER=test DB_PASS=test LOCAL_IP=172.18.105.178 LOCAL_PORT=3000 go run main.go
