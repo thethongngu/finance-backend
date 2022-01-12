@@ -36,8 +36,8 @@ func StartRESTAPIServer() {
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}))
-
-	e.Static("/", "public")
+	e.Use(middleware.Recover())
+	e.Use(middleware.Logger())
 
 	e.GET("/ping", func(c echo.Context) error {
 		fmt.Println("ok")
@@ -62,5 +62,5 @@ func StartRESTAPIServer() {
 
 	member.GET("/stats", usecase.GetStats)
 
-	e.Logger.Fatal(e.Start(":80"))
+	e.Logger.Fatal(e.Start(":2808"))
 }
