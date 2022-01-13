@@ -32,7 +32,7 @@ func StartRESTAPIServer() {
 	localAddress := "https://" + ip + ":" + port
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://localhost:3000", localAddress, "https://finance.namdeo.one"},
+		AllowOrigins:     []string{"https://localhost:3000", localAddress, "https://finance.namdeo.one"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowCredentials: true,
 	}))
