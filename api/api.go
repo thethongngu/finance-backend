@@ -39,17 +39,17 @@ func StartRESTAPIServer() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 
-	e.GET("/ping", func(c echo.Context) error {
+	e.GET("/api/ping", func(c echo.Context) error {
 		fmt.Println("ok")
 		return c.String(http.StatusOK, "pong")
 	})
 
-	e.POST("/login", usecase.HandleLogin)
-	e.POST("/remember", usecase.HandleRemember)
+	e.POST("/api/login", usecase.HandleLogin)
+	e.POST("/api/remember", usecase.HandleRemember)
 
-	e.GET("/currency", usecase.GetCurrency)
+	e.GET("/api/currency", usecase.GetCurrency)
 
-	member := e.Group("/member", usecase.ValidateUser)
+	member := e.Group("/api/member", usecase.ValidateUser)
 	member.Static("/img", "img")
 
 	member.GET("/wallet", usecase.ListWallet)
